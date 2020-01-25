@@ -1,5 +1,19 @@
-$color-primary: #7a6f6f;
+$color-primary: #38ef7d;
+$color-secondary: #11998e;
+$color-tertiary: #2c3e50;
+$color-quaternary: rgb(235, 235, 235);
+$color-white: #fff;
 
+@mixin button {
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    outline: none;
+    border: 0;
+    padding: 4px 10px;
+    margin: 10px 10px 5px 0;
+    cursor: pointer;
+}
 
 * {
     margin: 0;
@@ -9,4 +23,96 @@ $color-primary: #7a6f6f;
 
 body {
     font-family: 'Lato', sans-serif;
+}
+
+form {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0 5px;
+
+    input {
+        width: 100%;
+        font-size: 20px;
+        padding: 10px 0;
+        border: 0;
+        outline: none;
+        margin: 10px 0;
+
+        &[type=text] {
+            text-indent: 10px;
+
+            background-color: $color-tertiary;
+
+            color: $color-white;
+
+            &::placeholder {
+                color: lighten($color-quaternary, 50%);
+                opacity: 0.7;
+            }
+        }
+
+        &[type=submit] {
+            text-transform: uppercase;
+            margin-top: -5px;
+            background: linear-gradient(to right, $color-secondary, $color-primary);
+            cursor: pointer;
+        }
+    }
+}
+
+.task {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 0 5px;
+    margin-top: 20px 0;
+
+    h1 {
+        text-transform: uppercase;
+        text-align: center;
+
+        &::after {
+            content: '';
+            background: linear-gradient(to right, $color-secondary, $color-primary);
+            width: 100px;
+            height: 4px;
+            display: block;
+            margin: 10px auto 20px;
+        }
+    }
+
+    &-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 15px;
+
+        &_item {
+            background-color: $color-quaternary;
+            padding: 10px 15px;
+
+            .item-name {
+                font-size: 25px;
+            }
+
+            .item-tools {
+                padding: 50px 0;
+                display: block;
+
+                &_status {
+                    display: block;
+                    margin: 10px 0;
+                    color: lighten($color: #000000, $amount: 30%);
+                }
+
+                &_edit {
+                    @include button;
+                    background-color: #38ef7d;
+                }
+
+                &_remove {
+                    @include button;
+                    background-color: lighten($color-secondary, 10%) // #b62d2d; #11998e;
+                }
+            }
+        }
+    }
 }

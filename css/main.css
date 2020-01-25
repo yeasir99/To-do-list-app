@@ -83,8 +83,8 @@ form input[type=submit] {
 .task-container {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (1fr)[2];
-      grid-template-columns: repeat(2, 1fr);
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
   grid-gap: 15px;
 }
 
@@ -95,6 +95,9 @@ form input[type=submit] {
 
 .task-container_item .item-name {
   font-size: 25px;
+  width: 100%;
+  outline: none;
+  border: 0;
 }
 
 .task-container_item .item-tools {

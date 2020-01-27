@@ -20,7 +20,16 @@ UiControlar.prototype.addTaskToList = function(task) {
         
     `;
   container.appendChild(div);
-  task.value = "";
+};
+
+UiControlar.prototype.addTaskToLs = function(task) {
+  let items;
+  localStorage.getItem("items") === null
+    ? (items = [])
+    : (items = JSON.parse(localStorage.getItem("items")));
+
+  items.push(task);
+  localStorage.setItem("items", JSON.stringify(items));
 };
 
 UiControlar.prototype.editTask = function(ele) {
@@ -52,10 +61,12 @@ UiControlar.prototype.removeTask = function(ele) {
 };
 
 document.querySelector("form").addEventListener("submit", function(e) {
+  e.preventDefault();
   const task = document.querySelector("input[type=text]");
   var ui = new UiControlar();
   ui.addTaskToList(task);
-  e.preventDefault();
+  ui.addTaskToLs(task.value);
+  task.value = "";
 });
 
 document

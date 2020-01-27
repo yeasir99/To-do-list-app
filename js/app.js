@@ -32,6 +32,32 @@ UiControlar.prototype.addTaskToLs = function(task) {
   localStorage.setItem("items", JSON.stringify(items));
 };
 
+UiControlar.prototype.getTaskFromLs = function() {
+  let items;
+  localStorage.getItem("items") === null
+    ? (items = [])
+    : (items = JSON.parse(localStorage.getItem("items")));
+
+  items.forEach(function(value) {
+    const container = document.querySelector(".task-container");
+    const div = document.createElement("div");
+    div.className = "task-container_item";
+    div.innerHTML = `
+          <div class="item-name">${value}</div>
+          <div class=".item-tools">
+          <label class="item-tools_status">
+              complete
+              <input type="checkbox">
+          </label>
+              <button class="item-tools_edit">Edit</button>
+              <button class="item-tools_remove">Remove</button>
+          </div>
+          
+      `;
+    container.appendChild(div);
+  });
+};
+
 UiControlar.prototype.editTask = function(ele) {
   const taskList = ele.target.parentElement.parentElement;
   const taskName = taskList.firstElementChild;
@@ -59,6 +85,11 @@ UiControlar.prototype.removeTask = function(ele) {
   const taskList = ele.target.parentElement.parentElement;
   taskList.remove();
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+  var ui = new UiControlar();
+  ui.getTaskFromLs();
+});
 
 document.querySelector("form").addEventListener("submit", function(e) {
   e.preventDefault();

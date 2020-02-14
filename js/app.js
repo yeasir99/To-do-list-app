@@ -1,4 +1,5 @@
 function UiControlar() {}
+
 UiControlar.prototype.addTaskToList = function(task) {
   if (task.value === "") {
     alert(`Before submit please inter task name`);
@@ -22,6 +23,9 @@ UiControlar.prototype.addTaskToList = function(task) {
   container.appendChild(div);
 };
 
+
+
+
 UiControlar.prototype.addTaskToLs = function(task) {
   let items;
   localStorage.getItem("items") === null
@@ -32,7 +36,44 @@ UiControlar.prototype.addTaskToLs = function(task) {
   localStorage.setItem("items", JSON.stringify(items));
 };
 
-UiControlar.prototype.getTaskFromLs = function() {
+UiControlar.prototype.editTask = function(ele) {
+  let matchvalue;
+  const taskList = ele.target.parentElement.parentElement;
+  const taskName = taskList.firstElementChild;
+  const input = document.createElement("input");
+  input.type = "text";
+  matchvalue = taskName.textContent;
+  input.value = taskName.textContent;
+  taskList.insertBefore(input, taskName);
+  taskList.removeChild(taskName);
+  input.className = "item-name";
+  ele.target.textContent = "Save";
+  Object.defineProperty(this, 'matchvalue',{
+    get: function(){return matchvalue}
+  }
+  )
+};
+
+UiControlar.prototype.saveTask = function(ele) {
+  const taskList = ele.target.parentElement.parentElement;
+  const input = taskList.firstElementChild;
+  const div = document.createElement("div");
+  div.textContent = input.value;
+  taskList.insertBefore(div, input);
+  taskList.removeChild(input);
+  div.className = "item-name";
+  ele.target.textContent = "Edit";
+};
+
+UiControlar.prototype.removeTask = function(ele) {
+  const taskList = ele.target.parentElement.parentElement;
+  taskList.remove();
+};
+
+
+// save data in localStorage
+
+function getTaskFromLs() {
   let items;
   localStorage.getItem("items") === null
     ? (items = [])
@@ -58,37 +99,38 @@ UiControlar.prototype.getTaskFromLs = function() {
   });
 };
 
-UiControlar.prototype.editTask = function(ele) {
-  const taskList = ele.target.parentElement.parentElement;
-  const taskName = taskList.firstElementChild;
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = taskName.textContent;
-  taskList.insertBefore(input, taskName);
-  taskList.removeChild(taskName);
-  input.className = "item-name";
-  ele.target.textContent = "Save";
-};
 
-UiControlar.prototype.saveTask = function(ele) {
-  const taskList = ele.target.parentElement.parentElement;
-  const input = taskList.firstElementChild;
-  const div = document.createElement("div");
-  div.textContent = input.value;
-  taskList.insertBefore(div, input);
-  taskList.removeChild(input);
-  div.className = "item-name";
-  ele.target.textContent = "Edit";
-};
+//remove data from local storage
 
-UiControlar.prototype.removeTask = function(ele) {
-  const taskList = ele.target.parentElement.parentElement;
-  taskList.remove();
-};
+function removeTaskFromLs(ele){
+  let taskParent = ele.target.parentElement.parentElement;
+  let items = JSON.parse(localStorage.getItem("items"));
+ 
+  items.forEach((item, index)=>{
+      if(taskParent.firstElementChild.textContent == item){
+        items.splice(index, 1);
+      }
+  });
+  localStorage.setItem('items', JSON.stringify(items))
+}
+
+// edit data ans save new data in local storage
+function editDataLs(ele){
+  let items = JSON.parse(localStorage.getItem("items"));
+  items.forEach((item, index)=>{
+      if(matchValue = items){
+        items[index] = ele.target.parentElement.parentElement.firstElementChild.textContent;
+      }
+  });
+  localStorage.setItem('items', JSON.stringify(items));
+}
+
+
+// load content from local storage
 
 document.addEventListener("DOMContentLoaded", function() {
   var ui = new UiControlar();
-  ui.getTaskFromLs();
+  getTaskFromLs.call(ui);
 });
 
 document.querySelector("form").addEventListener("submit", function(e) {
@@ -104,11 +146,15 @@ document
   .querySelector(".task-container")
   .addEventListener("click", function(e) {
     var ui = new UiControlar();
+    let matchValue;
     if (e.target.textContent === "Edit") {
       ui.editTask(e);
+      matchValue = ui.matchvalue;
     } else if (e.target.textContent === "Save") {
       ui.saveTask(e);
+      editDataLs.call(ui,e);
     } else if (e.target.textContent === "Remove") {
+      removeTaskFromLs.call(ui,e)
       ui.removeTask(e);
     }
   });
